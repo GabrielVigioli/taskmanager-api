@@ -3,11 +3,12 @@ import { userServices } from './services/userServices.js'
 import { taskServices } from './services/taskServices.js'
 import jwt from 'jsonwebtoken'
 import { middleware } from './middleware/auth.js'
+import cors from 'cors'
 
 const app = express()
 
 app.use(express.json())
-
+app.use(cors())
 app.get('/', (req, res) => {
   res.status(200).send('Hello World')
 })
@@ -30,7 +31,7 @@ app.post('/users', async (req, res) => {
   }
 })
 
-app.post('/tasks',middleware.authenticate, async (req, res) => {
+app.post('/tasks', middleware.authenticate, async (req, res) => {
   const data = req.body
 
   try {
@@ -46,7 +47,7 @@ app.post('/tasks',middleware.authenticate, async (req, res) => {
   }
 })
 
-app.get('/tasks/:userId',middleware.authenticate, async (req, res) => {
+app.get('/tasks/:userId', middleware.authenticate, async (req, res) => {
   const user_Id = req.params.userId
   try {
     const tasks = await taskServices.getTaskByUserId(Number(user_Id))
@@ -56,7 +57,7 @@ app.get('/tasks/:userId',middleware.authenticate, async (req, res) => {
   }
 })
 
-app.put('/tasks/:taskId',middleware.authenticate, async (req, res) => {
+app.put('/tasks/:taskId', middleware.authenticate, async (req, res) => {
   const taskId = Number(req.params.taskId)
   const data = req.body
   try {
@@ -91,10 +92,11 @@ app.post('/login', async (req, res) => {
   }
 })
 
-app.get('/users', middleware.authenticate, async (req, res) => {
-  res.json({ message: 'token valido' })
+app.get('/me', middleware.authenticate, async (req, res) => {
+  const userId = req.user.userId
+  const user = await userServices.findUser(userId)
+  res.status(200).json(user)
 })
-
 app.listen(3000, () => {
-  console.log('server is listening on port 3000...')
+  console.log('server is listening on port 2000...')
 })

@@ -42,7 +42,17 @@ const loginUser = async (email, password) => {
     throw new Error('You have to signup first')
   }
 }
+
+const findUser = async userId => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  })
+  return user
+}
 export const userServices = {
   createUser,
-  loginUser
+  loginUser,
+  findUser
 }
