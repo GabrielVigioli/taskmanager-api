@@ -1,4 +1,3 @@
-import { error } from 'console'
 import { prisma } from '../lib/prisma.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
@@ -49,7 +48,8 @@ const findUser = async userId => {
       id: userId
     }
   })
-  return user
+  const { password, ...userWithoutPass } = user
+  return userWithoutPass
 }
 export const userServices = {
   createUser,

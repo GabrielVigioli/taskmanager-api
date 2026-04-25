@@ -51,7 +51,7 @@ const deleteTask = async taskId => {
       id: taskId
     }
   })
-  console.log(`Task: ${taskId} sucessfully deleted`)
+  return deleteTask
 }
 
 export const taskServices = {

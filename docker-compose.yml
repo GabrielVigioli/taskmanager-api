@@ -12,6 +12,8 @@ services:
       POSTGRES_PASSWORD: prisma
     ports:
       - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - prisma-network
     healthcheck:
@@ -55,3 +57,5 @@ services:
 networks:
   prisma-network:
     name: prisma-network
+volumes:
+  postgres_data:
