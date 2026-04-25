@@ -12,13 +12,22 @@ const createTask = async (user_Id, title, description, due_date) => {
   return task
 }
 
+const getTaskByTaskId = async taskId => {
+  const task = await prisma.task.findUnique({
+    where: {
+      id: taskId
+    }
+  })
+  return task
+}
+
 const getTaskByUserId = async userId => {
   const tasks = await prisma.task.findMany({
     where: {
       user_Id: userId
     },
     orderBy: {
-      created_at
+      created_at: 'desc'
     }
   })
   return tasks
@@ -49,5 +58,6 @@ export const taskServices = {
   createTask,
   getTaskByUserId,
   updateTask,
-  deleteTask
+  deleteTask,
+  getTaskByTaskId
 }
